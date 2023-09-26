@@ -5,17 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Identificador de Animales</title>
+    <title>IAnimals</title>
 </head>
 
 <body>
-    <h1>Identificador de Animales</h1>
-    <input type="file" id="imageInput" accept="image/*">
-    <label for="imageInput">Seleccionar Imagen</label>
-    <img id="uploadedImage" />
-    <button onclick="predictAnimal()">Predecir</button>
-    <h3>Resultado de la predicción: </h3>
-    <p><span id="predictionResult"></span></p>
+    <header>
+        <h1>IAnimals</h1>
+
+    </header>
+    <div class="container">
+        <div class="left">
+            <img id="uploadedImage" />
+            <label for="imageInput">Seleccionar Imagen</label>
+            <input type="file" id="imageInput" accept="image/*">
+    
+        </div>
+        <div class="right">
+            <select id="targetLanguage">
+                <option>Selecciona un idioma...</option>
+                <option value="de">Alemán(Deutsch)</option>
+                <option value="ar">Árabe(عربي)</option>
+                <option value="zh-Hans">Chino(中文)</option>
+                <option value="cs">Checo(Česky)</option>
+                <option value="da">Danés(Dansk)</option>
+                <option value="es">Español(Español)</option>
+                <option value="fr">Francés(Français)</option>
+                <option value="el">Griego(Ελληνικά)</option>
+                <option value="hi">Hindi(हिंदी)</option>
+                <option value="nl">Holandés(Nederlands)</option>
+                <option value="en">Inglés(English)</option>
+                <option value="it">Italiano(Italiano)</option>
+                <option value="ja">Japonés(日本語)</option>
+                <option value="no">Noruego(Norsk)</option>
+                <option value="pl">Polaco(Polski)</option>
+                <option value="pt">Portugués(Português)</option>
+                <option value="sv">Sueco(Svenska)</option>
+                <option value="tr">Turco(Türkçe)</option>
+            </select>
+            <button onclick="predictAnimal()">Predecir</button>
+            <h3>Resultado: </h3>
+            <p><span id="predictionResult"></span></p>
+    
+        </div>
+
+    </div>
     <footer>
         Juan Martin Garcia - Cristian David Trilleras - Senasoft 2023
     </footer>
@@ -24,6 +57,7 @@
     <script>
         const imageInput = document.getElementById('imageInput');
         const uploadedImage = document.getElementById('uploadedImage');
+        const targetLanguage = document.getElementById('targetLanguage');
 
         imageInput.addEventListener('change', () => {
             const file = imageInput.files[0];
@@ -75,13 +109,16 @@
                 const predictedAnimal = prediction.tagName;
 
                 // Traducción de la etiqueta predicha a tres idiomas diferentes, haciendo llamado a la funcion de traduccion
-                const translations = await translateText(predictedAnimal, ['es', 'it', 'en'], apiKeyTranslation, translationEndpoint);
+                
 
-                 predictionResult.innerHTML = `
-                Español: ${translations[0]}<br>
-                Italiano: ${translations[1]}<br>
-                inglés: ${translations[2]}
-                `;
+                const selectedLanguage = targetLanguage.value; // Obtener el idioma seleccionado
+                // Realizar la traducción y mostrar el resultado en el idioma seleccionado
+                const translation = await translateText(predictedAnimal, selectedLanguage, apiKeyTranslation, translationEndpoint);
+                
+                const selectedLanguageName = getLanguageName(selectedLanguage);
+                const predictionResult = document.getElementById('predictionResult');
+             predictionResult.textContent = `Resultado en ${selectedLanguageName}: ${translation}.`;
+                
                 
             } catch (error) {
                 //manejo de errores por si ocurre algun fallo
@@ -90,12 +127,11 @@
             }
         }
         //funcion de traduccion con parametros
-    async function translateText(text, targetLanguages, apiKey, endpoint) {
-        //arreglo vacio donde insertaremos los idiomas a traducir
-    const translations = [];
+    async function translateText(text, targetLanguage, apiKey, endpoint) {
+       
     const location = 'eastus';
 
-    for (const targetLanguage of targetLanguages) {
+    
         //llamamos nuestro servicio de traduccion y aplicamos metodo post
         const translationResponse = await fetch(`${endpoint}/translate?api-version=3.0&to=${targetLanguage}`, {
             method: 'POST',
@@ -108,16 +144,68 @@
         });
 
         //validacion por si fallamos asignando los idiomas
-        if (translationResponse.ok) {
+       
             const translationData = await translationResponse.json();
-            translations.push(translationData[0].translations[0].text);
-        } else {
-            translations.push('Error en la traducción.');
-        }
-    }
+            const translatedText = translationData[0].translations[0].text;
+        
+    
 
-    return translations;
+    return translatedText;
 }
+
+function getLanguageName(languageCode) {
+            switch (languageCode) {
+                case 'en':
+                    return 'Inglés(English)';
+                case 'es':
+                    return 'Español(Español)';
+                case 'fr':
+                    return 'Francés(Français)';
+                case 'it':
+                    return 'Italiano(Italiano)';
+                case 'de':
+                    return 'Alemán(Deutsch)';
+                case 'pt':
+                    return 'Portugués(Português)';
+                case 'ar':
+                    return 'Árabe(عربي)';
+                case 'hi':
+                    return 'Hindi(हिंदी)';
+                case 'ja':
+                    return 'Japonés(日本語)';
+                case 'sv':
+                    return 'Sueco(Svenska)';
+                case 'da':
+                    return 'Danés(Dansk)';
+                case 'zh-Hans':
+                    return 'Chino(中文)';
+                case 'nl':
+                    return 'Holandés(Nederlands)';
+                case 'no':
+                    return 'Noruego(Norsk)';
+                case 'el':
+                    return 'Griego(Ελληνικά)';
+                case 'tr':
+                    return 'Turco(Türkçe)';
+                case 'pl':
+                    return 'Polaco(Polski)';
+                case 'cs':
+                    return 'Checo(Česky)';
+                
+                default:
+                    return 'Desconocido(Unknown)';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
     </script>
 </body>
 
