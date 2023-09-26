@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Identificador de Animales</title>
+</head>
+
+<body>
+    <h1>Identificador de Animales</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    <label for="imageInput">Seleccionar Imagen</label>
+    <img id="uploadedImage" />
+    <button onclick="predictAnimal()">Predecir</button>
+    <h3>Resultado de la predicción: </h3>
+    <p><span id="predictionResult"></span></p>
+    <footer>
+        Juan Martin Garcia - Cristian David Trilleras - Senasoft 2023
+    </footer>
+
+    
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const uploadedImage = document.getElementById('uploadedImage');
+
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            if (file) {
+                uploadedImage.src = URL.createObjectURL(file);
+                uploadedImage.style.display = 'block'; 
+            }
+        });
+        //funcion de prediccion
+        async function predictAnimal() {
+            //declaracion de variables y llamado de propiedades html
+            const imageInput = document.getElementById('imageInput');
+            const predictionResult = document.getElementById('predictionResult');
+            const apiKey = '2f279389f85b4f8c8352bd329da4bc4c';
+
+            const apiKeyTranslation = '9d6449b9611645fb88acfb6956198cb1';
+            const translationEndpoint = 'https://api.cognitive.microsofttranslator.com/';
+            
+            //validacion de la insercion de la imagen
+            const file = imageInput.files[0];
+            if (!file) {
+                alert('Por favor, selecciona una imagen.');
+                return;
+            }
+
+
+            // Carga la imagen al servidor
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                //consumimos nuestro servicio cognitivo con el metodo post
+                const response = await fetch(`https://senasoft.cognitiveservices.azure.com/customvision/v3.0/Prediction/4d9e1c91-1f1a-42b1-8f4f-f3a7a37c7351/classify/iterations/SENASOFT-IMG/image`, {
+                    method: 'POST',
+                    headers: {
+                        'Prediction-Key': apiKey
+                    },
+                    body: formData
+                });
+                
+                //mensaje de validacion por si falla la peticion 
+                if (!response.ok) {
+                    throw new Error('No se pudo realizar la predicción.');
+                }
+
+                //obtenemos el tag de la imagen para asignarlo a la imagen subida
+                const data = await response.json();
+                const prediction = data.predictions[0];
+                const predictedAnimal = prediction.tagName;
+
+                // Traducción de la etiqueta predicha a tres idiomas diferentes, haciendo llamado a la funcion de traduccion
+                const translations = await translateText(predictedAnimal, ['es', 'it', 'en'], apiKeyTranslation, translationEndpoint);
+
+                 predictionResult.innerHTML = `
+                Español: ${translations[0]}<br>
+                Italiano: ${translations[1]}<br>
+                inglés: ${translations[2]}
+                `;
+                
+            } catch (error) {
+                //manejo de errores por si ocurre algun fallo
+                predictionResult.textContent = 'Error en la predicción. ';
+                console.error(error);
+            }
+        }
+        //funcion de traduccion con parametros
+    async function translateText(text, targetLanguages, apiKey, endpoint) {
+        //arreglo vacio donde insertaremos los idiomas a traducir
+    const translations = [];
+    const location = 'eastus';
+
+    for (const targetLanguage of targetLanguages) {
+        //llamamos nuestro servicio de traduccion y aplicamos metodo post
+        const translationResponse = await fetch(`${endpoint}/translate?api-version=3.0&to=${targetLanguage}`, {
+            method: 'POST',
+            headers: {
+                'Ocp-Apim-Subscription-Key': apiKey,
+                'Content-Type': 'application/json',
+                "Ocp-Apim-Subscription-Region": location
+            },
+            body: JSON.stringify([{ text }])
+        });
+
+        //validacion por si fallamos asignando los idiomas
+        if (translationResponse.ok) {
+            const translationData = await translationResponse.json();
+            translations.push(translationData[0].translations[0].text);
+        } else {
+            translations.push('Error en la traducción.');
+        }
+    }
+
+    return translations;
+}
+    </script>
+</body>
+
+</html>
