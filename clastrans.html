@@ -1,42 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-   
-
-    <title>IAnimals</title>
+    <title>Document</title>
 </head>
-
 <body>
     <header class="header">
         <h1>QuindIA</h1>
-        
+        <p>Explora el fascinante mundo de la IA y descubre cómo está transformando nuestro futuro.</p>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="face.html">Reconocimiento rostros</a>
+            <a href="clastrans.html">clasificacion/traduccion</a>
+            <a href="deteccion.html">deteccion de objetos</a>
+        </nav>
     </header>
-    <div class="container">
-        <div class="left">
-                <div class="title">
-                    <h2>Reconocimiento de rostros</h2>
-                    <h4>!Vamos a buscar rostros!</h4>
-                    <input type="url"id="url-to-detect" placeholder="Ingresa la url de una imagen"/>
-                    <button id="start-button">Reconocer</button>
-
-                </div>
-                <div class="imgContainer">
-                    <img src="" alt="" id="image-to-detect">
-                </div>
-                
-            
-            
-            
-        </div>
-        <div class="right">
+    <div class="right">
+        <div class="containerimagec">
             <img id="uploadedImage" />
+
+        </div>
+        <div class="ins">
             <h3>¡Sube una imagen desde tu dispositivo!</h3>
             <label for="imageInput">Seleccionar Imagen</label>
-            <input type="file" id="imageInput" accept="image/*">
+            <input type="file" id="imageInput" accept="image/*" class="iface">
             <select id="targetLanguage">
                 <option value="">Selecciona un idioma...</option>
                 <option value="de">Alemán(Deutsch)</option>
@@ -59,28 +48,14 @@
                 <option value="tr">Turco(Türkçe)</option>
             </select>
             <button onclick="predictAnimal()">Predecir</button>
-            
-            <h3>Resultado: </h3>
-            <p><span id="predictionResult"></span></p>
-            
-        </div>
 
+        </div>
+        
+        <h3>Resultado: </h3>
+        <p><span id="predictionResult"></span></p>
+        
     </div>
-    <footer>
-        Juan Martin Garcia - Cristian David Trilleras - Senasoft 2023
-    </footer>
-    
 
     <script src="main.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-    
-
-

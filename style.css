@@ -1,24 +1,36 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    
 }
-
-.header{
-    
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    
+header {
+    background-color: #0d2752;
+    color: #fff;
+    text-align: center;
+    padding: 50px 0;
+}
+h1 {
+    font-size: 36px;
+}
+p {
+    font-size: 18px;
+    margin-top: 20px;
+}
+nav {
+    margin-top: 20px;
+}
+nav a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4285f4;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+nav a:hover {
+    background-color: #3579d8;
 }
 
 .container {
@@ -37,19 +49,45 @@ body {
     justify-content: center;
     align-items: center;
     height: fit-content;
+    margin-bottom: 200px;
+    margin-top: 200px;
 }
 
 .title{
     width: 20%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 5px;
+    
+    box-shadow: 0px 0px 25px #888; 
+    padding: 10px;
+}
+
+.iface {
+    border: 1px solid #888; 
+    border-radius: 7px;
+    padding: 5px; 
+    font-size: 16px; 
+    box-shadow: 0px 0px 10px #888; 
+    
 }
 
 .right {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
 }
 
-h1 {
-    color: #007acc;
+.ins{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 
 input[type="file"] {
     display: none;
@@ -118,11 +156,45 @@ footer {
 
 .imgContainer {
     position: relative;
-    width: 60%;
-    object-fit: contain;
 
-    /* & img {
-        height: 100%;
-    } */
+  
 }
+
+.imgContainer2 {
+    position: relative;
+  
+    width: 40vw;
+    & img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  
+  .fp {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .enc{
+    text-align: center;
+  }
+
+  .iContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+  }
+
+  .aboutContainer{
+    width: 65%;
+    padding-left: 5%;
+  }
+
+
 
