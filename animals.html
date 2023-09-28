@@ -5,24 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+   
+
     <title>IAnimals</title>
 </head>
 
 <body>
     <header>
         <h1>IAnimals</h1>
-
+        
     </header>
     <div class="container">
         <div class="left">
             <img id="uploadedImage" />
+            <h3>¡Sube una imagen desde tu dispositivo!</h3>
             <label for="imageInput">Seleccionar Imagen</label>
             <input type="file" id="imageInput" accept="image/*">
-    
+            <h4>O hazlo por medio de una url:</h4>
+            
+            
         </div>
         <div class="right">
             <select id="targetLanguage">
-                <option>Selecciona un idioma...</option>
+                <option value="">Selecciona un idioma...</option>
                 <option value="de">Alemán(Deutsch)</option>
                 <option value="ar">Árabe(عربي)</option>
                 <option value="zh-Hans">Chino(中文)</option>
@@ -43,15 +48,23 @@
                 <option value="tr">Turco(Türkçe)</option>
             </select>
             <button onclick="predictAnimal()">Predecir</button>
+            
             <h3>Resultado: </h3>
             <p><span id="predictionResult"></span></p>
-    
+            
+            <div class="part2">
+                <label for="imageUrl">deteccion de objetos</label>
+                <input type="file" id="imageUrl" accept="image/*">
+                <button id="detectButton">detectar</button>
+                <ul id="objectList"></ul>
+            </div>
         </div>
 
     </div>
     <footer>
         Juan Martin Garcia - Cristian David Trilleras - Senasoft 2023
     </footer>
+    
 
     <script src="main.js"></script>
 </body>
