@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@azure/cognitiveservices-computervision": "^8.2.0",
-    "microsoft-cognitiveservices-speech-sdk": "^1.32.0"
-  }
-}

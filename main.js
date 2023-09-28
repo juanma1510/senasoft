@@ -2,7 +2,6 @@
 
 //creamos variables para poder elegir he imprimir la imagen, y traer el idioma
 const imageInput = document.getElementById('imageInput');
-const imageUrlInput = document.getElementById('imageUrl').value;
 const uploadedImage = document.getElementById('uploadedImage');
 const targetLanguage = document.getElementById('targetLanguage');
 
@@ -184,4 +183,61 @@ function getLanguageName(languageCode) {
             return 'Desconocido(Unknown)';
     }
 }
+
+
+
+
+const BASE_URL = "https://facesenasoft.cognitiveservices.azure.com/";
+const API_KEY = "36afe7834c03475eb93b84c50283ca97";
+const StartButton = document.querySelector("#start-button");
+const image = document.querySelector("#image-to-detect");
+const imgContainer = document.querySelector(".imgContainer");
+const url = document.querySelector("#url-to-detect");
+const fetchData = async (ENDPOINT, url) => {
+  try {
+    const response = await fetch(BASE_URL + ENDPOINT, {
+      method: "POST",
+      body: JSON.stringify({ url: url }), // Convert the body to a JSON string
+      headers: {
+        "Ocp-Apim-Subscription-Key": API_KEY,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    const url1 = url.value
+    if(!url1){
+        alert("Url invalida.")
+        return;
+    }
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+const createDivToFaceRecognition = (style) => {
+    const el = document.createElement("div");
+    el.style.top = `${style.top}px`;
+    el.style.left = `${style.left}px`;
+    el.style.width = `${style.width}px`;
+    el.style.height = `${style.height}px`;
+    el.style.position = "absolute";
+    el.style.border = "2px solid #f00";
+    return el
+}
+
+StartButton.addEventListener("click", async (e) => {
+  image.src = url.value;
+  const data = await fetchData("face/v1.0/detect", url.value);
+    data.map(el => {
+        imgContainer.append(createDivToFaceRecognition(el.faceRectangle));
+        console.log(el.faceRectangle);
+    })
+});
 
